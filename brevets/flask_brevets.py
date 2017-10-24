@@ -53,12 +53,19 @@ def _calc_times():
     """
     app.logger.debug("Got a JSON request")
     km = request.args.get('km', 999, type=float)
+    start = arrow.get(request.args.get('dayte')).isoformat()
+    #get the arrow from the iso formatted "dayte" variable in javascript, and make sure its an iso format string
+    maxDist = request.args.get('myDistance', 999, type=float)
+    #this is a float/int like km, so I used the same code as above
     app.logger.debug("km={}".format(km))
     app.logger.debug("request.args: {}".format(request.args))
     # FIXME: These probably aren't the right open and close times
     # and brevets may be longer than 200km
-    open_time = acp_times.open_time(km, 200, arrow.now().isoformat)
-    close_time = acp_times.close_time(km, 200, arrow.now().isoformat)
+    print("Dayte: {}", start)
+    open_time = acp_times.open_time(km, maxDist, start)
+    print("Open Time Complete")
+    print("open_time: {}", open_time)
+    close_time = acp_times.close_time(km, maxDist, start)
     result = {"open": open_time, "close": close_time}
     return flask.jsonify(result=result)
 

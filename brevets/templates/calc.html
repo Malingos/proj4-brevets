@@ -39,7 +39,7 @@
   -- they appear above the rest of the content, just until the next 
   -- action.  (This is only on request/response transactions that
   -- result in regenerating the page, not on every xmlhttp request.) 
-  -->
+  -->-->
 
 {% with messages = get_flashed_messages() %}
   {% if messages %}
@@ -51,23 +51,23 @@
   {% endif %}
 {% endwith %}
 
-<!-- Design on bootstrap grid -->
+<!-- Design on bootstrap grid -->-->
 <form role="form">
 <div class="row">
   <div class="col-md-4">
     <label>Distance</label>
-  <select name="distance" id="brevet_dist_km">
+  <select name="distance" id="brevet_max_dist">
     <option value="200">200km</option>
     <option value="300">300km</option>
     <option value="400">400km</option>
     <option value="600">600km</option>
     <option value="1000">1000km</option>
   </select>
-  </div> <!-- columns 1--4  -->
+  </div> <!-- columns 1  -->
   <div class="col-md-6">
     <label>Begins at</label>
-    <input type=date name="begin_date" id="begin_date" value="2017-01-01" />
-    <input type=time name="begin_time" id="begin_time" value="00:00"    />
+    <input type=date name="begin_date" id="begin_date" value="2017-01-01" /><!--beginning date -->
+    <input type=time name="begin_time" id="begin_time" value="00:00"    /><!--beginning time -->
   </div> <!-- columns 5-10 -->
   </div> <!-- row -->
 
@@ -75,7 +75,7 @@
   <!-- Although we do not use tables for general page layout, they are
        appropriate for something that really is a table, like this
        one.  We allocate it the full 12 columns of the bootstrap grid.
-  -->
+  -->-->
   <div class="row">
   <div class="col-md-12"> 
   <table class="control_time_table">
@@ -111,7 +111,6 @@
   </div> <!-- col -->
   </div> <!-- row -->
 </form>
-
 <script type="text/javascript">
 
   var SCRIPT_ROOT = {{ request.script_root|tojson|safe }} ;
@@ -124,10 +123,18 @@
   // stash them in hidden fields.) 
   function calc_times(control) {
     var km = control.find("input[name='km']").val();
+    //isoFormat: YYYY-MM-DDTHH:MM:SS
+    var dayte = $("#begin_date").val() + "T" + $("#begin_time").val();
+    //now in arrow iso format
+    console.log("Date variable: " + dayte);
+    //begin_date is the id of the date selector
+    //begin_time is the id of the time selector
+    var myDistance = $("#brevet_max_dist").val();
+    //brevet_max_dist is the id of the drop down list for distances
     var open_time_field = control.find("input[name='open']");
     var close_time_field = control.find("input[name='close']");
     
-    $.getJSON(TIME_CALC_URL, { km: km }, 
+    $.getJSON(TIME_CALC_URL, { km: km , dayte: dayte, myDistance: myDistance}, 
       // response handler
       function(data) {
          var times = data.result;
